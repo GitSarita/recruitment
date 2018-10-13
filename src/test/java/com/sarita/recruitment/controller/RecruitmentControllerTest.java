@@ -1,13 +1,16 @@
 package com.sarita.recruitment.controller;
 
 import com.sarita.recruitment.model.JobOfferRequestBuilder;
+import com.sarita.recruitment.request.JobOfferRequest;
+import com.sarita.recruitment.RecruitmentService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -20,15 +23,22 @@ public class RecruitmentControllerTest {
     @Autowired
     private RecruitmentController recruitmentController;
 
+    @MockBean
+    private RecruitmentService recruitmentService;
+
     @Test
     public void testCreateJobOffer() {
-        ResponseEntity<String> responseEntity = recruitmentController.createJobOffer(new JobOfferRequestBuilder()
+        JobOfferRequest jobOfferRequest = new JobOfferRequestBuilder()
                 .withJobTitle("Java Developer")
                 .withStartDate(new Date())
-                .build());
+                .build();
+        Mockito.when(recruitmentService.createJobOffer(jobOfferRequest)).thenReturn(java.util.Optional.of("Java Developer"));
+        ResponseEntity<String> responseEntity = recruitmentController.createJobOffer(jobOfferRequest);
 
-        Assert.assertTrue(responseEntity.getStatusCode().equals(HttpStatus.CREATED));
+        Assert.assertEquals(responseEntity.getStatusCode(), HttpStatus.CREATED);
+        Assert.assertTrue(responseEntity.getBody().contains("Java Developer"));
 
     }
+
 
 }
