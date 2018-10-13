@@ -1,9 +1,8 @@
 package com.sarita.recruitment;
 
+import com.sarita.recruitment.exception.JobOfferNotFoundException;
 import com.sarita.recruitment.model.JobOffer;
-import com.sarita.recruitment.RecruitmentRepository;
 import com.sarita.recruitment.request.JobOfferRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -28,5 +27,13 @@ public class RecruitmentService {
     public Optional<String> createJobOffer(JobOfferRequest jobOfferRequest) {
         JobOffer jobOffer = recruitmentRepository.save(getJobOffer.apply(jobOfferRequest));
         return Optional.of(jobOffer.getJobTitle());
+    }
+
+    public Optional<JobOffer> getJobOfferById(Integer id){
+        Optional<JobOffer> jobOffer= recruitmentRepository.findById(id);
+        if (!jobOffer.isPresent()){
+            throw new JobOfferNotFoundException("Job offer Not Found");
+        }
+        return jobOffer;
     }
 }
