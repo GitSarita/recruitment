@@ -1,16 +1,16 @@
 package com.sarita.recruitment.model;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table
 public class Application {
+    @Id
+    private Integer applicationId;
     @ManyToOne
     private JobOffer offer;
     private String email;
     private String resume;
+    @Enumerated(EnumType.STRING)
     private ApplicationStatus applicationStatus;
 
     public JobOffer getOffer() {
@@ -43,5 +43,13 @@ public class Application {
 
     public void setApplicationStatus(ApplicationStatus applicationStatus) {
         this.applicationStatus = applicationStatus;
+    }
+
+    public Integer getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(Integer applicationId) {
+        this.applicationId = applicationId;
     }
 }

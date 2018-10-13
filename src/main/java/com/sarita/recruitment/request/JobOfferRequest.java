@@ -1,10 +1,13 @@
 package com.sarita.recruitment.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class JobOfferRequest {
 
     private String jobTitle;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date startDate;
 
     public String getJobTitle() {
@@ -26,5 +29,8 @@ public class JobOfferRequest {
     public JobOfferRequest(String jobTitle, Date startDate) {
         this.jobTitle = jobTitle;
         this.startDate = startDate;
+    }
+
+    public JobOfferRequest() {
     }
 }
