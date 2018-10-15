@@ -1,6 +1,7 @@
 package com.sarita.recruitment;
 
 import com.sarita.recruitment.exception.ApplicationAlreadyExists;
+import com.sarita.recruitment.exception.ApplicationNotFound;
 import com.sarita.recruitment.exception.DuplicateJobCreationException;
 import com.sarita.recruitment.exception.JobOfferNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,12 @@ public class RecruitmentControllerAdvice {
     @ExceptionHandler(DuplicateJobCreationException.class)
     @ResponseBody
     public ResponseEntity<String> handleDuplicateJobCreationException(final DuplicateJobCreationException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ApplicationNotFound.class)
+    @ResponseBody
+    public ResponseEntity<String> handleApplicationNotFound(final ApplicationNotFound e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

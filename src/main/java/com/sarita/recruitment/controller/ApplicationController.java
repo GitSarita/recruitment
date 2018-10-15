@@ -26,6 +26,11 @@ public class ApplicationController {
         return new ResponseEntity<>(applicationService.getApplications(), HttpStatus.OK);
     }
 
+    @GetMapping("admin/{id}/application")
+    public ResponseEntity<Application> getApplications(@PathVariable Integer id) {
+        return new ResponseEntity<>(applicationService.getApplication(id), HttpStatus.OK);
+    }
+
     @GetMapping("admin/applicationsByJob")
     public ResponseEntity<List> getApplicationPerOffer(@RequestParam Integer offerId) {
 

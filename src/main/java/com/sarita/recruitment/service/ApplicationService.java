@@ -1,6 +1,7 @@
 package com.sarita.recruitment.service;
 
 import com.sarita.recruitment.exception.ApplicationAlreadyExists;
+import com.sarita.recruitment.exception.ApplicationNotFound;
 import com.sarita.recruitment.exception.JobOfferNotFoundException;
 import com.sarita.recruitment.model.Application;
 import com.sarita.recruitment.model.ApplicationStatus;
@@ -51,6 +52,14 @@ public class ApplicationService {
         }
 
 
+    }
+    public Application getApplication(Integer id){
+        Optional<Application> application= applicationRepository.findById(id);
+        if(application.isPresent()){
+            return application.get();
+        }else{
+            throw new ApplicationNotFound("Application Id not found");
+        }
     }
 
     public Application updateStatus(ApplicationStatus appStatus, Integer applicationId) {
