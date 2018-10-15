@@ -35,3 +35,8 @@ returns "noOfApplications": 1,
 6. status change triggers a notification (*)
 Could not attempt this due to time limitations.
 I planned to implement this using RabbitMQ
+
+Planned items:
+debugging Lazy loading of applications
+adding Response calles to return data from Controller.
+adding more integration and unit tests
