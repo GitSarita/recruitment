@@ -1,12 +1,19 @@
 package com.sarita.recruitment.model;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
+@Table
 public class Application {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer applicationId;
+
     @ManyToOne
+    @JsonIgnore
     private JobOffer offer;
     private String email;
     private String resume;
@@ -51,5 +58,15 @@ public class Application {
 
     public void setApplicationId(Integer applicationId) {
         this.applicationId = applicationId;
+    }
+
+    public Application(JobOffer offer, String email, String resume, ApplicationStatus applicationStatus) {
+        this.offer = offer;
+        this.email = email;
+        this.resume = resume;
+        this.applicationStatus = applicationStatus;
+    }
+
+    public Application() {
     }
 }

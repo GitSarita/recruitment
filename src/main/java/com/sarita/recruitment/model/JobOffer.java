@@ -1,7 +1,6 @@
 package com.sarita.recruitment.model;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,13 +11,23 @@ import java.util.Date;
 @Table
 public class JobOffer {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer jobId;
+    @Column(unique=true)
     private String jobTitle;
     private Date startDate;
     private Integer noOfApplications;
-    @LazyCollection(LazyCollectionOption.EXTRA)
-    @OneToMany
+
+    @OneToMany(
+
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+
+    )
+    @JoinTable(name = "JOB_APPLICATION",
+            joinColumns = @JoinColumn(name = "JOB_ID"),
+            inverseJoinColumns = @JoinColumn(name = "APPLICATION_ID"))
     private Collection<Application> applications = new ArrayList<>();
 
     public Integer getJobId() {

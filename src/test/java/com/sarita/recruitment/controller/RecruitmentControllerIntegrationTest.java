@@ -1,33 +1,20 @@
 package com.sarita.recruitment.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sarita.recruitment.RecruitmentApplication;
-import com.sarita.recruitment.RecruitmentService;
+import com.sarita.recruitment.model.JobOffer;
 import com.sarita.recruitment.model.JobOfferRequestBuilder;
 import com.sarita.recruitment.request.JobOfferRequest;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Date;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = RecruitmentApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -44,19 +31,44 @@ public class RecruitmentControllerIntegrationTest {
     }
 
     @Test
-    public void testIndex() throws Exception {
+    public void testCreateJob() throws Exception {
 
         JobOfferRequest jobOfferRequest = new JobOfferRequestBuilder()
-                .withJobTitle("Java Developer")
+                .withJobTitle("Java Developertestcreate")
                 .withStartDate(new Date())
                 .build();
         HttpEntity<JobOfferRequest> entity = new HttpEntity<>(jobOfferRequest, headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<JobOffer> response = restTemplate.exchange(
                 createURLWithPort("/joboffer"),
-                HttpMethod.POST, entity, String.class);
+                HttpMethod.POST, entity, JobOffer.class);
 
         Assert.assertTrue(response.getStatusCode()==HttpStatus.CREATED);
 
     }
-}
+
+    @Test
+    public void testFindJob() throws Exception {
+        JobOfferRequest jobOfferRequest = new JobOfferRequestBuilder()
+                .withJobTitle("Java Developer1")
+                .withStartDate(new Date())
+                .build();
+        HttpEntity<JobOfferRequest> entity = new HttpEntity<>(jobOfferRequest, headers);
+
+        ResponseEntity<JobOffer> createJobResponse = restTemplate.exchange(
+                createURLWithPort("/joboffer"),
+                HttpMethod.POST, entity, JobOffer.class);
+
+        Assert.assertTrue(createJobResponse.getStatusCode()==HttpStatus.CREATED);
+        HttpEntity<String> getJobEntity = new HttpEntity<String>(null, headers);
+
+        ResponseEntity<String> getJobResponse = restTemplate.exchange(
+                createURLWithPort("//"+createJobResponse.getBody().getJobTitle()+"//joboffer"),
+                HttpMethod.GET, getJobEntity, String.class);
+
+        Assert.assertTrue(getJobResponse.getStatusCode()==HttpStatus.OK);
+
+    }
+
+
+    }

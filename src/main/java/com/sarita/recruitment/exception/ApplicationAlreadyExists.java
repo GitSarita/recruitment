@@ -1,9 +1,11 @@
 package com.sarita.recruitment.exception;
 
-public class JobOfferNotFoundException extends RuntimeException {
+public class ApplicationAlreadyExists extends RuntimeException {
+
     String message;
 
-    public JobOfferNotFoundException(String message) {
+    public ApplicationAlreadyExists(String message) {
+
         super(message);
         this.message = message;
     }
