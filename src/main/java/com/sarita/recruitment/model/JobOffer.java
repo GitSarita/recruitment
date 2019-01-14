@@ -18,16 +18,17 @@ public class JobOffer {
     private Date startDate;
     private Integer noOfApplications;
 
-    @OneToMany(
-
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
-
-    )
-    @JoinTable(name = "JOB_APPLICATION",
-            joinColumns = @JoinColumn(name = "JOB_ID"),
-            inverseJoinColumns = @JoinColumn(name = "APPLICATION_ID"))
+//    @OneToMany(
+//
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true,
+//            fetch = FetchType.LAZY
+//
+//    )
+//    @JoinTable(name = "JOB_APPLICATION",
+//            joinColumns = @JoinColumn(name = "JOB_ID"),
+//            inverseJoinColumns = @JoinColumn(name = "APPLICATION_ID"))
+    @JoinColumn(name="JOB_ID")
     private Collection<Application> applications = new ArrayList<>();
 
     public Integer getJobId() {

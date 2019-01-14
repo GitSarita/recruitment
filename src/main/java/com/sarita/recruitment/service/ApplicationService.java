@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 @Service
 public class ApplicationService {
@@ -22,10 +22,10 @@ public class ApplicationService {
     private ApplicationRepository applicationRepository;
     private RecruitmentService recruitmentService;
 
-    BiFunction<ApplicationRequest, JobOffer, Application> getNewApplication
-            = (ApplicationRequest applicationRequest, JobOffer jobOffer) -> {
+    private Function<ApplicationRequest, Application> applicationMapper
+            = (ApplicationRequest applicationRequest) -> {
         Application application = new Application();
-        application.setOffer(jobOffer);
+        application.setJobId(applicationRequest.getJobId());
         application.setApplicationStatus(ApplicationStatus.APPLIED);
         application.setEmail(applicationRequest.getEmail());
         application.setResume(applicationRequest.getResume());
@@ -44,11 +44,7 @@ public class ApplicationService {
         if (count > 0) {
             throw new ApplicationAlreadyExists("Application already submitted by you");
         } else {
-            JobOffer jobOffer = recruitmentService.getJobOfferById(applicationRequest.getJobId());
-            Application applicationEntity = applicationRepository.save(getNewApplication.apply(applicationRequest, jobOffer));
-            jobOffer.getApplications().add(applicationEntity);
-            recruitmentService.saveJobOffer(jobOffer);
-            return applicationEntity;
+            return applicationRepository.save(applicationMapper.apply(applicationRequest));
         }
 
 

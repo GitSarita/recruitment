@@ -12,20 +12,21 @@ public class Application {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer applicationId;
 
-    @ManyToOne
-    @JsonIgnore
-    private JobOffer offer;
+    @Column
+    private Integer jobId;
+    @Column
     private String email;
+    @Column
     private String resume;
     @Enumerated(EnumType.STRING)
     private ApplicationStatus applicationStatus;
 
-    public JobOffer getOffer() {
-        return offer;
+    public Integer getJobId() {
+        return jobId;
     }
 
-    public void setOffer(JobOffer offer) {
-        this.offer = offer;
+    public void setJobId(Integer jobId) {
+        this.jobId = jobId;
     }
 
     public String getEmail() {
@@ -60,8 +61,8 @@ public class Application {
         this.applicationId = applicationId;
     }
 
-    public Application(JobOffer offer, String email, String resume, ApplicationStatus applicationStatus) {
-        this.offer = offer;
+    public Application(Integer jobId, String email, String resume, ApplicationStatus applicationStatus) {
+        this.jobId = jobId;
         this.email = email;
         this.resume = resume;
         this.applicationStatus = applicationStatus;

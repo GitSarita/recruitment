@@ -63,7 +63,7 @@ public class RecruitmentControllerIntegrationTest {
         HttpEntity<String> getJobEntity = new HttpEntity<String>(null, headers);
 
         ResponseEntity<String> getJobResponse = restTemplate.exchange(
-                createURLWithPort("//"+createJobResponse.getBody().getJobTitle()+"//joboffer"),
+                createURLWithPort("//"+createJobResponse.getBody().getJobId()+"//joboffer"),
                 HttpMethod.GET, getJobEntity, String.class);
 
         Assert.assertTrue(getJobResponse.getStatusCode()==HttpStatus.OK);

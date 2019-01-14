@@ -11,12 +11,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 @Service
 public class RecruitmentService {
-    RecruitmentRepository recruitmentRepository;
-    ApplicationRepository applicationRepository;
+    private RecruitmentRepository recruitmentRepository;
+    private ApplicationRepository applicationRepository;
+    private Consumer<Optional<JobOffer>> jobOfferNotFound = (Optional<JobOffer> offer) -> {
+        if (!offer.isPresent()) {
+            throw new JobOfferNotFoundException("Job offer Not Found");
+        }
+    };
 
     @Autowired
     public RecruitmentService(RecruitmentRepository recruitmentRepository, ApplicationRepository applicationRepository) {
@@ -24,7 +30,7 @@ public class RecruitmentService {
         this.applicationRepository = applicationRepository;
     }
 
-    Function<JobOfferRequest, JobOffer> getJobOffer
+    private Function<JobOfferRequest, JobOffer> getJobOffer
             = (JobOfferRequest jobOfferRequest) -> {
         JobOffer jobOffer = new JobOffer();
         jobOffer.setJobTitle(jobOfferRequest.getJobTitle());
@@ -50,9 +56,8 @@ public class RecruitmentService {
 
     public JobOffer getJobOfferById(Integer id) {
         Optional<JobOffer> jobOffer = recruitmentRepository.findById(id);
-        if (!jobOffer.isPresent()) {
-            throw new JobOfferNotFoundException("Job offer Not Found");
-        }
+
+        jobOfferNotFound.accept(jobOffer);
         JobOffer job = jobOffer.get();
         job.setNoOfApplications(applicationRepository.countApplicationByJobTitle(job.getJobTitle()));
         return job;
@@ -60,9 +65,7 @@ public class RecruitmentService {
 
     public JobOffer getJobOfferByJobTitle(String jobTitle) {
         Optional<JobOffer> jobOffer = recruitmentRepository.findByJobTitle(jobTitle);
-        if (!jobOffer.isPresent()) {
-            throw new JobOfferNotFoundException("Job offer Not Found");
-        }
+        jobOfferNotFound.accept(jobOffer);
         JobOffer job = jobOffer.get();
         job.setNoOfApplications(applicationRepository.countApplicationByJobTitle(job.getJobTitle()));
         return job;
