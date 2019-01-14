@@ -1,6 +1,11 @@
 # Recruitment
 Rest Services for Recruitment process.
 
+HOW to BUILD and RUN :
+Build using - mvn clean install
+RUN  - recruitment>java -jar target\recruitment-0.0.1-SNAPSHOT.jar
+
+
 1. user has to be able to create a job offer and read a single and list all offers.
 URL - http://localhost:8080/joboffer
 BODY - {
